@@ -37,3 +37,24 @@ When the function is over those variables get popped off the stack.
  - "minimizing the amount of duplicate data on the heap"
  - "cleaning up unused data on the heap so we don’t run out of space"
 
+## Rules
+
+ - Each value has a variable called it's owner
+ - There can only be one owner at a time
+ - When the owner goes out of scope the value will be dropped
+
+## String type
+
+Differs from 'string literals' which are immutable, hardcoded values in our source code.
+
+## Types with the 'Copy' trait
+
+Here are some of the types that are Copy:
+
+All the integer types, like u32.
+The boolean type, bool, with values true and false.
+The character type, char.
+All the floating point types, like f64.
+Tuples, but only if they contain types that are also Copy. (i32, i32) is Copy, but (i32, String) is not.
+
+
