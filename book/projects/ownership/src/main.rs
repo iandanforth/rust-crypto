@@ -40,9 +40,24 @@ fn main() {
 
 	//println!("{:?}", t); // This would throw an error because t has moved
 
+	// Return Values and Scope
+
+	let given = gives_ownership();
+	let g2 = String::from("Hello!");
+	let g3 = takes_and_gives_back(g2);
 
 }
 
 fn take_ownership(some_string: String) {
 	println!("{:?}", some_string);
+}
+
+fn gives_ownership() -> String {
+	let s = String::from("Yay!");
+
+	return s;
+}
+
+fn takes_and_gives_back(words: String) -> (String, String) {
+	return (words, String::from("blork"));
 }
