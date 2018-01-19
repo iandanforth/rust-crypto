@@ -19,3 +19,6 @@ error[E0277]: the trait bound `[i32]: std::marker::Sized` is not satisfied
 
 How do you give it a sized trait if not by specifying a size for the array?
 
+Why is the struct block separate from the impl block? This isn't user friendly and allows code that should be collocated to be visually separated
+
+Also, blech that this allows *multiple* implementation blocks
