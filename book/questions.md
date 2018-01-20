@@ -22,3 +22,6 @@ How do you give it a sized trait if not by specifying a size for the array?
 Why is the struct block separate from the impl block? This isn't user friendly and allows code that should be collocated to be visually separated
 
 Also, blech that this allows *multiple* implementation blocks
+
+
+I'm sad rust uses environment variables for configuration
