@@ -25,3 +25,17 @@ Also, blech that this allows *multiple* implementation blocks
 
 
 I'm sad rust uses environment variables for configuration
+
+
+------
+https://doc.rust-lang.org/book/second-edition/ch06-01-defining-an-enum.html
+If we wanted to store V4 addresses as four u8 values but still express V6 addresses as one String value, we wouldn’t be able to with a struct.
+
+This seems to work just fine
+
+```rust
+struct IP {
+    v4: (u8, u8, u8, u8),
+    v6: String
+}
+```
