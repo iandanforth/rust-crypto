@@ -39,3 +39,6 @@ struct IP {
     v6: String
 }
 ```
+
+
+The distinction between a struct and an enum is too loose. Their usecases overlap which will lead to user confusion.
