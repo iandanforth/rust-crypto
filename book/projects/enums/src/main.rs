@@ -27,6 +27,8 @@ fn main() {
 
     let m = Message::Write(String::from("Well howdy"));
     m.call();
+
+    value_in_cents2(Coin2::Quarter(UsState::California));
 }
 
 
@@ -66,13 +68,41 @@ enum Coin {
 fn value_in_cents(coin: Coin) -> i32 {
     match coin {
         Coin::Penny => {
-            1
+            return 1;
         },
         Coin::Nickel => {
-            5
+            return 5;
         },
         Coin::Dime => 10, // Anoyingly you can also forgoe the braces and just use this naked fat arrow syntax
         Coin::Quarter => 20,
+    }
+}
+
+#[derive(Debug)]
+enum UsState {
+    California,
+    Maine,
+}
+
+#[derive(Debug)]
+enum Coin2 {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter(UsState),
+    HalfDollar
+}
+
+fn value_in_cents2(coin: Coin2) -> i32 {
+    match coin {
+        Coin2::Penny => 1,
+        Coin2::Nickel => 5,
+        Coin2::Dime => 10,
+        Coin2::Quarter(state) => { // Here the value stored in Quarter will be bound to the variable 'state'
+            println!("Quarter from {:?}", state);
+            return 25;
+        },
+        _ => 0 // This is "default" option if nothing else matches
     }
 }
 

@@ -42,3 +42,11 @@ struct IP {
 
 
 The distinction between a struct and an enum is too loose. Their usecases overlap which will lead to user confusion.
+
+#########
+
+The default clause in a match is dumb, using _ isn't clear. The default keyword is much more helpful.
+
+#########
+
+if let should not have been added. A standard if clause and a match cover all required cases. This is just lazy syntax for lazy typists.
