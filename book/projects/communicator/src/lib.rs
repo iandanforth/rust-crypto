@@ -1,19 +1,13 @@
 // The name lib.rs is not special. You can also put modules in your main.rs if you like
 
-
-
-mod network {
-    fn connect() {
-
-    }
-}
+pub mod network;
 
 // Not sure why this is allowed or encouraged but ok
-mod client {
-    fn connect() {
+// mod client {
+//     fn connect() {
 
-    }
-}
+//     }
+// }
 
 // This won't compile, module names must be unique in a given namespace.
 // mod client {
@@ -21,7 +15,7 @@ mod client {
 // }
 
 // This is dumb but compiles just fine and dandy
-mod outside {
+pub mod outside {
 
     fn foo() {
     }
@@ -33,7 +27,7 @@ mod outside {
     }
 }
 
-mod client2; // If clinet2 doesn't exist as client2.rs or mod/client2.rs it won't compile
+pub mod client; // If clinet2 doesn't exist as client2.rs or mod/client2.rs it won't compile
 
 
 #[cfg(test)]

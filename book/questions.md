@@ -50,3 +50,9 @@ The default clause in a match is dumb, using _ isn't clear. The default keyword 
 #########
 
 if let should not have been added. A standard if clause and a match cover all required cases. This is just lazy syntax for lazy typists.
+
+
+#########
+
+Public and private methods arn't super useful. Python would be a much more difficult language to use if you coudln't easily reach inside a module and use inner functions. A developer might think 
+that a function should be private but only the user knows what they need.
