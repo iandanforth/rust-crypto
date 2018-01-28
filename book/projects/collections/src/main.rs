@@ -37,5 +37,40 @@ fn main() {
 
     // v2.push(6); This is an error because Rust isn't smart enough to update references for you if you change the size of an array
 
+
+    // Iterating over vectors
+
+    let new_v = vec![100, 32, 57];
+    for i in &new_v {
+        print!("{:?}\n", i);
+    }
+
+    println!("Now with mutable shit ....");
+    let mut mut_new_v = vec![100, 32, 57];
+
+    // The example encourages an anti-pattern which is mutating an object while iterating over it. NO BAD DON'T DO THAT.
+    
+    let mut holder: Vec<i32> = vec![];
+    for mut i in mut_new_v {
+        i += 50;
+        holder.push(i); // Push into a new vector rather than mutating existing one.
+        println!("{:?}", i);
+    }
+    // How to store multiple types in a vector using an enum
+    // Create a little wrapper that goes through all the types
+    enum w {
+        i(i32),
+        f(f64),
+        s(String)
+    }
+
+    // Create a vector that is expected to all be of the type 'w' which we just created
+    let mut holds_many: Vec<w> = vec![];
+
+    holds_many.push(w::i(32));
+    holds_many.push(w::s(String::from("Hi there!")));
+    holds_many.push(w::f(22.22));
+
+
     println!("Hello, world!");
 }
