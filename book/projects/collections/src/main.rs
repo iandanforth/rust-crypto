@@ -73,4 +73,15 @@ fn main() {
 
 
     println!("Hello, world!");
+
+
+    // Some string shit
+    // A String is a wrapper over a Vec<u8>
+    // Rust encodes strings incorrectly and can't handle basic indexing
+    // This is because rust is concerned more with how things are stored in memory than making the language useable 
+    let s1 = String::from("tic");
+    let s2 = String::from("tac");
+    let s3 = String::from("toe");
+
+    let s = s1 + "-" + &s2 + "-" + &s3;
 }
