@@ -99,6 +99,7 @@ fn main() {
 
     // Hash maps
 
+    // The fact that this is not included in the prelude is a crime
     use std::collections::HashMap;
 
     let mut scores = HashMap::new();
@@ -106,4 +107,14 @@ fn main() {
     // Interestingly this won't compile until you insert something so it can infer types
     scores.insert(String::from("Blue"), 10);
     scores.insert(String::from("Yellow"), 50);
+    // scores.insert(String::from("Red"), String::from("A lot!")); // This is a compile error
+
+    // You then use .get() to retrieve values, the return is an Option<&V> which means it can be None
+    let blue_score = scores.get(&String::from("Blue")); // This has to be a reference, but it's cool if the reference is anonymous
+
+    // There is also a 'collect' method which will turn tuples into a hashmap
+    let teams  = vec![String::from("Blue"), String::from("Yellow")]; // Make a vector of strings
+    let initial_scores = vec![10, 50]; // Make a vector of ints
+    // Call zip() on the iterable version of teams, passing in the iterable version of scores and then call collect on the resulting set of tuples
+    let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect(); 
 }
