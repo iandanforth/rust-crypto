@@ -117,4 +117,28 @@ fn main() {
     let initial_scores = vec![10, 50]; // Make a vector of ints
     // Call zip() on the iterable version of teams, passing in the iterable version of scores and then call collect on the resulting set of tuples
     let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect(); 
+
+    let mut more_scores = HashMap::new();
+
+    // Modifying existing values
+    more_scores.insert(String::from("Blue"), 20);
+    more_scores.insert(String::from("Blue"), 10); // <- This value wins (as expected)
+    println!("{:?}", more_scores);
+
+    // If you want to conditionally insert (only if a value doesn't exist)
+    more_scores.entry(String::from("Yellow")).or_insert(30); // Key doesn't exist so the key/value pair is created
+    more_scores.entry(String::from("Yellow")).or_insert(10); // Key DOES exist so the value isn't modified.
+    println!("{:?}", more_scores );
+
+    let text = "Hello world wonderful world";
+
+    let mut map = HashMap::new();
+
+    for word in text.split_whitespace() {
+        let count = map.entry(word).or_insert(0);
+        *count += 1;
+    }
+
+    println!("{:?}", map);
 }
+
