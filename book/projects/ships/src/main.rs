@@ -1,5 +1,6 @@
 extern crate rand;
 
+use std::io;
 use rand::Rng;
 
 fn clear(board: &mut Vec<Vec<i32>>) {
@@ -60,5 +61,22 @@ fn main() {
     set_ships(&mut board);
     show(& board);
 
-    println!("Hello, world!");
+    loop {
+        let mut input = String::new();
+        println!("Input your attack coordinates: ");
+        io::stdin().read_line(& mut input)
+            .expect("Failed to read line.");
+
+        let coords: Vec<&str> = input.trim().split(' ').collect();
+        let x = coords[0].parse::<usize>().expect("This didn't work!");
+        let y = coords[1].parse::<usize>().expect("That didn't work either!");
+
+        if attack(&mut board, x, y) {
+            println!("Hit!");
+        } else {
+            println!("Miss!");
+        }
+
+        println!("{:?}",  board[x][y]);
+    }
 }
