@@ -12,16 +12,15 @@ fn clear(board: &mut Vec<Vec<i32>>) {
     }
 }
 
-fn show(board: & Vec<Vec<i32>>) {
+fn show(board: &Vec<Vec<i32>>) {
     for i in 0..board.len() {
         println!("{:?}", board[i]);
-    }   
+    }
 }
 
 fn set_ships(board: &mut Vec<Vec<i32>>, num_ships: i32) {
     let mut s = 0;
     while s < num_ships {
-
         let x = rand::thread_rng().gen_range(0, board.len());
         let y = rand::thread_rng().gen_range(0, board.len());
         if board[x][y] == 0 {
@@ -46,7 +45,6 @@ fn attack(board: &mut Vec<Vec<i32>>, x: usize, y: usize) -> bool {
 }
 
 fn main() {
-
     let mut board: Vec<Vec<i32>> = Vec::new();
     let rows = 5;
     let elements = 5;
@@ -76,12 +74,19 @@ fn main() {
         }
         let mut input = String::new();
         println!("Input your attack coordinates: ");
-        io::stdin().read_line(& mut input)
+        io::stdin()
+            .read_line(&mut input)
             .expect("Failed to read line.");
 
         let coords: Vec<&str> = input.trim().split(' ').collect();
+        if coords.len() != 2 {
+            println!("Please enter two coordinates separated by a space. e.g. '2 0'");
+            continue;
+        }
         let x = coords[0].parse::<usize>().expect("This didn't work!");
-        let y = coords[1].parse::<usize>().expect("That didn't work either!");
+        let y = coords[1]
+            .parse::<usize>()
+            .expect("That didn't work either!");
 
         if attack(&mut board, x, y) {
             println!("Hit!");
