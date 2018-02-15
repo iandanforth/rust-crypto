@@ -18,9 +18,8 @@ fn show(board: & Vec<Vec<i32>>) {
     }   
 }
 
-fn set_ships(board: &mut Vec<Vec<i32>>) {
+fn set_ships(board: &mut Vec<Vec<i32>>, num_ships: i32) {
     let mut s = 0;
-    let num_ships = 5;
     while s < num_ships {
 
         let x = rand::thread_rng().gen_range(0, board.len());
@@ -33,6 +32,11 @@ fn set_ships(board: &mut Vec<Vec<i32>>) {
 }
 
 fn attack(board: &mut Vec<Vec<i32>>, x: usize, y: usize) -> bool {
+    if x >= board.len() || y >= board[0].len() {
+        println!("Your shot fell outside the board!");
+        return false;
+    }
+
     if board[x][y] == 1 {
         board[x][y] = 2;
         return true;
@@ -46,7 +50,9 @@ fn main() {
     let mut board: Vec<Vec<i32>> = Vec::new();
     let rows = 5;
     let elements = 5;
+    let mut num_ships = 5;
 
+    // Populate the board with zeros
     for _i in 0..rows {
         let mut row: Vec<i32> = Vec::new();
         for _j in 0..elements {
@@ -56,12 +62,18 @@ fn main() {
     }
 
     clear(&mut board);
-    show(& board);
-    println!("---------------");
-    set_ships(&mut board);
-    show(& board);
+    set_ships(&mut board, num_ships);
+
+    println!("You are facing a {} by {} board.", rows, elements);
+    println!("Somewhere on this board there are {} ships.", num_ships);
+    println!("You job is to sink them all with your cannons.");
 
     loop {
+        if num_ships <= 0 {
+            println!("All ships have been sunk! You win!");
+            show(&board);
+            break;
+        }
         let mut input = String::new();
         println!("Input your attack coordinates: ");
         io::stdin().read_line(& mut input)
@@ -73,10 +85,14 @@ fn main() {
 
         if attack(&mut board, x, y) {
             println!("Hit!");
+            num_ships -= 1;
+            if num_ships > 1 {
+                println!("There are {} ships remaining ...", num_ships);
+            } else {
+                println!("There is 1 ship remaining. Sink that bastard!");
+            }
         } else {
             println!("Miss!");
         }
-
-        println!("{:?}",  board[x][y]);
     }
 }
