@@ -65,7 +65,7 @@ fn main() {
         .opengl(opengl)
         .exit_on_esc(true)
         .build()
-        .unwrap();
+        .expect("Things went terribly wrong");
 
     let mut app = App {
         gl: GlGraphics::new(opengl),
