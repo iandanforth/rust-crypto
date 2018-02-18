@@ -1,50 +1,90 @@
-use std::process::Command;
-use std::thread;
-use std::time;
+extern crate piston;
+extern crate graphics;
+extern crate glutin_window;
+extern crate opengl_graphics;
 
-fn clear_screen() {
-    let output = Command::new("clear").output().unwrap_or_else(|e| {
-        panic!("failed to execute process: {}", e)
-    });
-    print!("{}", String::from_utf8_lossy(&output.stdout));
+use piston::window::WindowSettings;
+use piston::event_loop::*;
+use piston::input::*;
+use glutin_window::GlutinWindow as Window;
+use opengl_graphics::GlGraphics;
+use opengl_graphics::OpenGL;
+
+pub struct App {
+    gl: GlGraphics,
+    rotation: f64,
+    rotation2: f64
 }
 
-fn sleep() {
-    let frame_delay = time::Duration::from_millis(33);
-    thread::sleep(frame_delay);    
-}
+impl App {
+    fn render(&mut self, args: &RenderArgs) {
+        use graphics::*;
 
-fn tick() {
-    sleep();
-    clear_screen();
-}
+        const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
+        const RED:   [f32; 4] = [1.0, 0.0, 0.0, 0.75];
 
-fn show(board: &Vec<Vec<i32>>) {
-    for i in 0..board.len() {
-        println!("{:?}", board[i]);
+        let square = rectangle::square(0.0, 0.0, 50.0);
+        let square2 = rectangle::square(0.0, 0.0, 50.0);
+
+        let rotation = self.rotation;
+        let rotation2 = self.rotation2;
+        let (x, y) = ((args.width / 2) as f64, (args.height / 2) as f64);
+
+        self.gl.draw(args.viewport(), |c, gl| {
+            // Clear screen
+            clear(GREEN, gl);
+
+            let transform = c.transform.trans(x, y)
+                                       .rot_rad(rotation)
+                                       .trans(-25.0, -25.0);
+
+            rectangle(RED, square, transform, gl);
+
+            let transform2 = c.transform.trans(x, y)
+                                       .rot_rad(rotation2)
+                                       .trans(-25.0, -25.0);
+
+            rectangle(RED, square2, transform2, gl);     
+
+        });
+    }
+
+    fn update(&mut self, args: &UpdateArgs) {
+        self.rotation += 2.0 * args.dt;
+        self.rotation2 += 1.5 * args.dt;
     }
 }
 
 fn main() {
-    clear_screen();
+    let opengl = OpenGL::V3_2;
 
-    let mut counter = 0;
+    let mut window: Window = WindowSettings::new(
+        "spinning-square",
+        [200, 200]
+    )
+        .opengl(opengl)
+        .exit_on_esc(true)
+        .build()
+        .unwrap();
 
-    let mut board: Vec<Vec<i32>> = Vec::new();
+    let mut app = App {
+        gl: GlGraphics::new(opengl),
+        rotation: 0.0,
+        rotation2: 0.0
+    };
 
-    let board_dims = 10;
-    for _i in 0..board_dims {
-        let mut row: Vec<i32> = Vec::new();
-        for _j in 0..board_dims {
-            row.push(0);
+    let mut events = Events::new(EventSettings::new());
+
+    while let Some(e) = events.next(&mut window) {
+        if let Some(r) = e.render_args() {
+            app.render(&r);
         }
-        board.push(row);
+
+        if let Some(u) = e.update_args() {
+            app.update(&u);
+        }
     }
 
-    loop {
-        show(&board);
-        println!("{:?}", counter);
-        counter += 1;
-        tick();
-    }
+
+    println!("Hello piston!");
 }
