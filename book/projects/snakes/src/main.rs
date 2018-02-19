@@ -13,7 +13,8 @@ use opengl_graphics::OpenGL;
 pub struct App {
     gl: GlGraphics,
     rotation: f64,
-    rotation2: f64
+    x: f64,
+    y: f64
 }
 
 impl App {
@@ -24,11 +25,9 @@ impl App {
         const RED:   [f32; 4] = [1.0, 0.0, 0.0, 0.75];
 
         let square = rectangle::square(0.0, 0.0, 50.0);
-        let square2 = rectangle::square(0.0, 0.0, 50.0);
-
         let rotation = self.rotation;
-        let rotation2 = self.rotation2;
-        let (x, y) = ((args.width / 2) as f64, (args.height / 2) as f64);
+        let x = self.x - 50.0;
+        let y = self.y;
 
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear screen
@@ -39,19 +38,12 @@ impl App {
                                        .trans(-25.0, -25.0);
 
             rectangle(RED, square, transform, gl);
-
-            let transform2 = c.transform.trans(x, y)
-                                       .rot_rad(rotation2)
-                                       .trans(-25.0, -25.0);
-
-            rectangle(RED, square2, transform2, gl);     
-
         });
     }
 
     fn update(&mut self, args: &UpdateArgs) {
+        self.x = (self.x + 1.0) % 300.0;
         self.rotation += 2.0 * args.dt;
-        self.rotation2 += 1.5 * args.dt;
     }
 }
 
@@ -70,7 +62,8 @@ fn main() {
     let mut app = App {
         gl: GlGraphics::new(opengl),
         rotation: 0.0,
-        rotation2: 0.0
+        x: 100.0,
+        y: 100.0
     };
 
     let mut events = Events::new(EventSettings::new());
