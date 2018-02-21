@@ -1,0 +1,8 @@
+[package]
+name = "dataplotlib"
+version = "0.1.0"
+authors = ["iandanforth <iandanforth@gmail.com>"]
+
+[dependencies]
+
+dataplotlib = "0.1.3"
