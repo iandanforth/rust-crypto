@@ -40,11 +40,6 @@ impl App {
             rectangle(RED, square, transform, gl);
         });
     }
-
-    fn update(&mut self, args: &UpdateArgs) {
-        self.x = (self.x + 1.0) % 300.0;
-        self.rotation += 2.0 * args.dt;
-    }
 }
 
 fn main() {
@@ -68,16 +63,15 @@ fn main() {
 
     let mut events = Events::new(EventSettings::new());
 
-    while let Some(e) = events.next(&mut window) {
+    if let Some(e) = events.next(&mut window) {
         if let Some(r) = e.render_args() {
-            app.render(&r);
-        }
-
-        if let Some(u) = e.update_args() {
-            app.update(&u);
+                app.render(&r);
         }
     }
 
 
-    println!("Hello piston!");
+    let mut counter = 0;
+    loop {
+        counter += 1;
+    }
 }
