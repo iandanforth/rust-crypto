@@ -65,7 +65,8 @@ impl Graph {
                 // let y = base - h;
                 let y = 100.0;
                 let rect = rectangle::centered([0.0, 0.0, w, h]);
-                let t = c.transform.rot_deg(45.0);
+                let t = c.transform.rot_deg(45.0)
+                ;
                 rectangle(RED, rect, t, gl);
             }
         });
