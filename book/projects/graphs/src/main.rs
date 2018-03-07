@@ -51,12 +51,16 @@ impl Graph {
         let left_margin = 0.0;
 
         use graphics::line::Shape;
+        use graphics::line;
 
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear screen
             clear(WHITE, gl);
             let mut offset = 0.0;
             let w = 2.0;
+
+            line([1.0, 0.0, 0.0, 1.0], 3.0, [0.0, 0.0, 15.0, 15.0], c.transform, gl);
+
             for val in data {
                 let h = val.clone();
                 offset += 1.0;
@@ -65,8 +69,7 @@ impl Graph {
                 // let y = base - h;
                 let y = 100.0;
                 let rect = rectangle::centered([0.0, 0.0, w, h]);
-                let t = c.transform.rot_deg(45.0)
-                ;
+                let t = c.transform.rot_deg(45.0);
                 rectangle(RED, rect, t, gl);
             }
         });
