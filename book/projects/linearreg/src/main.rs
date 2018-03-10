@@ -20,7 +20,6 @@ fn load(filename: &'static str) -> na::Matrix<f64, na::Dynamic, na::Dynamic, na:
     for result in rdr.records() {
         let record = result.expect("Bad line");
         for field in record.iter() {
-            println!("{:?}", field);
             let f = field.parse::<f64>().expect("fluber");
             all_vals.push(f);
             temp_count += 1;
@@ -40,6 +39,15 @@ fn load(filename: &'static str) -> na::Matrix<f64, na::Dynamic, na::Dynamic, na:
     return dmatrix;
 }
 
+fn sum(vec: na::Matrix<f64, na::Dynamic, na::U1, na::MatrixVec<f64, na::Dynamic, na::U1>>) -> f64 {
+    let mut total = 0.0;
+    for val in vec.iter() {
+        total += val;
+    }
+
+    return total;
+}
+
 fn compute_cost(
         X: na::Matrix<f64, na::Dynamic, na::Dynamic, na::MatrixVec<f64, na::Dynamic, na::Dynamic>>,
         y: na::Matrix<f64, na::Dynamic, na::Dynamic, na::MatrixVec<f64, na::Dynamic, na::Dynamic>>
@@ -49,10 +57,20 @@ fn compute_cost(
     let scalar = 1 / (2 * m);
     let theta = Vector2::new(0.0, 0.0);
     let prod = X * theta;
-    println!("{:?}", prod); 
-    // J = (1/(2*m)) * sum(((X * theta) - y).^2);
+    let err = prod - y;
+    // let sqr = power(err, 2);
+    // let total = sum(err);
+    // println!("{:?}", total);
+    // let J = (1/(2*m)) * sum(((X * theta) - y).^2);
     return 0.0;
 }
+
+// fn power(
+//     vec: na::Matrix<f64, na::Dynamic, na::U1, na::MatrixVec<f64, na::Dynamic, na::U1>>,
+//     exp: i32) -> na::Matrix<f64, na::Dynamic, na::U1, na::MatrixVec<f64, na::Dynamic, na::U1>> {
+
+//     println!("Implement this!");
+// }
 
 fn main() {
     // Set up data
