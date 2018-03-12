@@ -3,8 +3,7 @@ extern crate nalgebra as na;
 
 // Linear Regression Translation from matlab into rust
 use std::fs::File;
-use std::iter::Sum;
-use na::{DMatrix, Vector2, U1, U2};
+use na::{DMatrix, Vector2};
 
 fn fit() {
     println!("Fitting data ...");
@@ -53,20 +52,16 @@ fn sum(vec: na::Matrix<f64, na::Dynamic, na::U1, na::MatrixVec<f64, na::Dynamic,
 }
 
 fn compute_cost(
-        X: na::Matrix<f64, na::Dynamic, na::U2, na::MatrixVec<f64, na::Dynamic, na::U2>>,
-        y: na::Matrix<f64, na::Dynamic, na::U1, na::MatrixVec<f64, na::Dynamic, na::U1>>
-    ) -> f64 {
+        X: &na::Matrix<f64, na::Dynamic, na::U2, na::MatrixVec<f64, na::Dynamic, na::U2>>,
+        y: &na::Matrix<f64, na::Dynamic, na::U1, na::MatrixVec<f64, na::Dynamic, na::U1>>,
+        theta: &na::Matrix<f64, na::U2, na::U1, na::MatrixArray<f64, na::U2, na::U1>>) -> f64 {
 
     let m = y.len();
-    let scalar = (1.0 / (2.0 * m as f64));
-    println!("{:?}", &scalar);
-    let theta = Vector2::new(0.0, 0.0);
+    let scalar = 1.0 / (2.0 * m as f64);
     let prod = X * theta;
     let err = prod - y;
-    println!("{:?}", &err);
     let sqr = power(err, 2);
     let total = sum(sqr);
-    println!("{:?}", &total);
     let J = scalar * total;
     return J;
 }
@@ -82,6 +77,31 @@ fn power(
     return vec;
 }
 
+
+fn gradient_descent(
+        X: &na::Matrix<f64, na::Dynamic, na::U2, na::MatrixVec<f64, na::Dynamic, na::U2>>,
+        y: &na::Matrix<f64, na::Dynamic, na::U1, na::MatrixVec<f64, na::Dynamic, na::U1>>,
+        theta: na::Matrix<f64, na::U2, na::U1, na::MatrixArray<f64, na::U2, na::U1>>,
+        alpha: f64,
+        iterations: i32) -> na::Matrix<f64, na::U2, na::U1, na::MatrixArray<f64, na::U2, na::U1>> {
+
+    let m = y.len();
+    let scalar = 1.0 / m as f64;
+    // Vectorized gradient calculation
+    let mut learned_theta = theta.clone();
+    let mut prod;
+    let mut grad;
+    let mut update;
+    for i in 0..iterations {
+        prod = X * learned_theta;
+        grad = scalar * (X.transpose() * (prod - y) );
+        update = alpha * grad;
+        learned_theta = learned_theta - update;
+    }
+
+    return learned_theta;
+}
+
 fn main() {
     // Set up data
     let data = load("ex1data1.txt");
@@ -89,15 +109,26 @@ fn main() {
     let X = data.column(0).insert_column(0, 1.0);
     // Pull out the final column as the labels
     let y = data.column(1).clone_owned();
-    println!("{:?}", &y);
 
     let theta = Vector2::new(0.0, 0.0);
 
     let iterations = 1500;
     let alpha = 0.01;
 
-    let cost = compute_cost(X, y);
-    println!("{:?}", cost);
+    let mut cost = compute_cost(&X, &y, &theta);
+    println!("With theta = [0; 0] \nComputed Cost = {:?}", &cost);
+    println!("Expected cost value (approx) 32.07");
+
+    let theta_2 = Vector2::new(-1.0, 2.0);
+    cost = compute_cost(&X, &y, &theta_2);
+    println!("With theta = [-1; 2] \nComputed Cost = {:?}", &cost);
+    println!("Expected cost value (approx) 54.24");
+
+    let learned_theta = gradient_descent(&X, &y, theta, alpha, iterations);
+    println!("Theta found by gradient descent:");
+    println!("{:?}", learned_theta);
+    println!("Expected values (approx)");
+    println!(" -3.6303 \n 1.1664");
 
     fit();
 }
